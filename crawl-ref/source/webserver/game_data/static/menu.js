@@ -1,6 +1,6 @@
 define(["jquery", "comm", "client", "ui", "./enums", "./dungeon_renderer",
-    "./cell_renderer", "./util", "./options"],
-function ($, comm, client, ui, enums, dungeon_renderer, cr, util, options) {
+    "./cell_renderer", "./util", "./options", "contrib/simplebar"],
+function ($, comm, client, ui, enums, dungeon_renderer, cr, util, options, simplebar) {
     "use strict";
 
     var chunk_size = 50;
@@ -140,11 +140,11 @@ function ($, comm, client, ui, enums, dungeon_renderer, cr, util, options) {
                 set_item_contents(item, item.elem);
             }
         }
+        menu.simplebar = new simplebar(content_div[0])
+        menu.simplebar.getScrollElement().addEventListener('scroll', menu_scroll_handler);
 
         menu_div.append("<div class='menu_more'>" + util.formatted_string_to_html(menu.more)
                         + "</div>");
-
-        content_div.scroll(menu_scroll_handler);
 
         menu.server_scroll = true;
         menu.created = true;
@@ -316,7 +316,7 @@ function ($, comm, client, ui, enums, dungeon_renderer, cr, util, options) {
 
         var item = (item_or_index.elem ?
                     item_or_index : menu.items[item_or_index]);
-        var contents = menu.elem.find(".menu_contents")
+        var contents = $(menu.simplebar.getScrollElement())
         var baseline = contents.children().offset().top;
 
         contents.scrollTop(item.elem.offset().top - baseline);
@@ -337,7 +337,7 @@ function ($, comm, client, ui, enums, dungeon_renderer, cr, util, options) {
 
         var item = (item_or_index.elem ?
                     item_or_index : menu.items[item_or_index]);
-        var contents = menu.elem.find(".menu_contents")
+        var contents = $(menu.simplebar.getScrollElement())
         var baseline = contents.children().offset().top;
 
         contents.scrollTop(item.elem.offset().top + item.elem.height()
@@ -565,7 +565,7 @@ function ($, comm, client, ui, enums, dungeon_renderer, cr, util, options) {
         if (!(menu.flags & enums.menu_flag.ALWAYS_SHOW_MORE))
         {
             var contents_height = menu.elem.find(".menu_contents_inner").height();
-            var contents = menu.elem.find(".menu_contents");
+            var contents = $(menu.simplebar.getScrollElement())
             var more = menu.elem.find(".menu_more");
             var avail_height = contents.height() + more.height();
             more[0].classList.toggle("hidden", contents_height <= avail_height);
