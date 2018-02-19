@@ -1147,6 +1147,8 @@ void wind_blast(actor* agent, int pow, coord_def target, bool card)
                     && act->is_habitable(newpos))
                 {
                     act->move_to_pos(newpos);
+                    if (auto ptrap = trap_at(newpos))
+                        ptrap->trigger(*act);
                     if (act->is_player())
                         stop_delay(true);
                     --push;
