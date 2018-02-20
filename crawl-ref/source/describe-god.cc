@@ -1079,7 +1079,7 @@ void describe_god(god_type which_god)
     });
 
 #ifdef USE_TILE_WEB
-    tiles_crt_control show_as_menu(CRT_MENU);
+    tiles_crt_control show_as_menu(CRT_MENU, "crt_shrink");
 #endif
 
     ui_push_layout(popup);
@@ -1206,7 +1206,7 @@ update_ui:
     });
 
 #ifdef USE_TILE_WEB
-    tiles_crt_control show_as_menu(CRT_MENU);
+    tiles_crt_control show_as_menu(CRT_MENU, "crt_shrink");
 #endif
 
     ui_push_layout(popup);
